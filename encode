@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function encode {
+	echo "Encoding '$@':"
+	if [[ -e "$@" ]]; then
+		local mime=$(file -Ib "$@" | cut -d ';' -f 1)
+		local data=$(base64 -i "$@")
+		echo "data:$mime;base64,$data"
+	else
+		echo "'$@' does not exist"
+	fi
+}
+
+if [ "$BASH_SOURCE" == "$0" ]; then
+	for file in "$@"; do
+		encode "$file"
+	done
+fi
